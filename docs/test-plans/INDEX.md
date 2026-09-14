@@ -34,6 +34,4 @@ A case lands in its component's plan **before** the test, and the test before th
 | Plan | Prefix | Tests | Covers |
 |---|---|---|---|
 | [package.md](package.md) | `SM` | `tests/test_package.py` | The library package itself — install and test runner. Not a component |
-
-*(No component plans yet. Each one lands here as its component is agreed, before any of its code is
-written.)*
+| [compass-navigation.md](compass-navigation.md) | `CN` | `tests/test_compass_navigation.py` | The compass directions the game navigates by, and the mechanism that holds navigation to them |

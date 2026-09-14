@@ -102,9 +102,15 @@ ruled out yet — there is no code to rule on.
 
 - **Editing design docs.** Update or add design documents whenever an architectural decision is made or
   refined. Capture the *why*, not just the *what*. Index new docs in [docs/INDEX.md](docs/INDEX.md).
-- **Constants live in `config.py`.** One file holds them all, so anyone about to declare a constant
-  finds the existing name rather than minting a second for the same value. The file does not exist yet;
-  it lands with the first constant.
+- **A component's own constants live in the component's module — a deliberate divergence.** The
+  library standard puts every module-level constant in `config.py`. Here that would cut every
+  component in half and make promotion a merge rather than a file move, which is principle 2 lost for
+  a discovery benefit the per-component boundary already provides. `DIRECTIONS` and `BUILD_REFUSED`
+  live in `compass_navigation.py`, and the `constant_outside_config` warning against them is this
+  decision rather than a gap. **Do not "fix" it.**
+
+  A constant genuinely shared *between* components is the case `config.py` exists for, and it lands
+  there. The file does not exist yet.
 - **Licensing — BSD-3-Clause, deliberately unlike the other `fcm-*` repositories.** `fcm-xrpl` and
   `fcm-subscriptions` are unlicensed and proprietary because the on-chain layer and the payment flow
   are where FCM's competitive edge sits. Nothing in this library is: how exits are defined and how room
