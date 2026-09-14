@@ -35,3 +35,4 @@ A case lands in its component's plan **before** the test, and the test before th
 |---|---|---|---|
 | [package.md](package.md) | `SM` | `tests/test_package.py` | The library package itself — install and test runner. Not a component |
 | [compass-navigation.md](compass-navigation.md) | `CN` | `tests/test_compass_navigation.py` | The compass directions the game navigates by, and the mechanism that holds navigation to them |
+| [size.md](size.md) | `SZ` | `tests/test_size.py` | How big a thing is, and how two of them compare |
