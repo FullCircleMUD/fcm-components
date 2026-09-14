@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fcm-components"
+version = "0.0.1"
+description = "FCM's shared components — one module per component, for Evennia games."
+readme = "README.md"
+license = {text = "BSD-3-Clause"}
+authors = [{name = "Tim Baird"}]
+requires-python = ">=3.10"
+keywords = ["evennia", "mud", "fcm", "components", "mixins"]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Framework :: Django",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Games/Entertainment :: Multi-User Dungeons (MUD)",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    # The Evennia surface the components extend.
+    "evennia",
+    # The mechanism behind log.py — writes with or without a reactor, so the
+    # library can log from anywhere.
+    "evennia-logging-extension",
+]
+
+[project.optional-dependencies]
+dev = [
+    "build",
+]
+
+[project.urls]
+Homepage = "https://github.com/FullCircleMUD/fcm-components"
+Repository = "https://github.com/FullCircleMUD/fcm-components"
+Issues = "https://github.com/FullCircleMUD/fcm-components/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["fcm_components*"]
