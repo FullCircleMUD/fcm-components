@@ -76,6 +76,56 @@ BUILD_REFUSED = (
 )
 
 
+#: Every written form of a direction, mapped to its full name — ``n`` and
+#: ``north`` both reach ``north``. Derived from DIRECTIONS rather than written
+#: out, so a direction cannot exist in one and be missing from the other.
+_BY_WRITTEN_FORM = {
+    form: direction.name
+    for direction in DIRECTIONS.values()
+    for form in (direction.name, direction.abbreviation)
+}
+
+
+def parse_direction(text):
+    """Split player input into ``(name, direction)``.
+
+    Serves the commands that act on a thing in a direction — ``open``,
+    ``close``, ``lock``, ``unlock``, ``picklock``, ``disarm_trap`` — so it is
+    about doors as much as exits.
+
+    **Call this only after a literal search has already failed.** Each word is
+    tried as a direction, so a name whose own words include one — ``south
+    gate`` — comes back split. Searching the input whole first means the
+    splitter only ever sees input that matched nothing.
+
+    Each word is tried as a direction. The first that is one becomes the
+    direction, in its full-name form whichever form was typed, and the
+    remaining words are the name.
+
+    ``direction`` is ``None`` when the input holds none, and ``name`` is an
+    empty string when the input was only a direction.
+
+    Cases CN-09 to CN-17.
+    """
+    words = text.strip().lower().split()
+    if not words:
+        return ("", None)
+
+    if len(words) == 1:
+        direction = _BY_WRITTEN_FORM.get(words[0])
+        if direction:
+            return ("", direction)
+        return (words[0], None)
+
+    for index, word in enumerate(words):
+        direction = _BY_WRITTEN_FORM.get(word)
+        if direction:
+            remaining = " ".join(words[:index] + words[index + 1:]).strip()
+            return (remaining, direction)
+
+    return (text.strip(), None)
+
+
 class _LockedBuildCommand:
     """Refuses, and says where to go instead.
 

@@ -11,7 +11,13 @@ Runnable on its own:
 
 import unittest
 
-from fcm_components.compass_navigation import DIRECTIONS, CmdDig, CmdOpen, CmdTunnel
+from fcm_components.compass_navigation import (
+    DIRECTIONS,
+    CmdDig,
+    CmdOpen,
+    CmdTunnel,
+    parse_direction,
+)
 
 
 class _Caller:
@@ -99,3 +105,46 @@ class LockedBuildingCommandsTest(unittest.TestCase):
         caller, called_through = self._run(CmdOpen)
         self.assertTrue(caller.messages)
         self.assertEqual(called_through, [])
+
+
+class ParseDirectionTest(unittest.TestCase):
+    """CN — parsing a direction out of player input."""
+
+    def test_a_name_then_a_direction_splits_into_both(self):
+        """CN-09 — `door south`."""
+        self.assertEqual(parse_direction("door south"), ("door", "south"))
+
+    def test_a_direction_then_a_name_splits_into_both(self):
+        """CN-10 — `south door`."""
+        self.assertEqual(parse_direction("south door"), ("door", "south"))
+
+    def test_an_abbreviation_returns_the_full_direction_name(self):
+        """CN-11 — in either position."""
+        self.assertEqual(parse_direction("s door"), ("door", "south"))
+        self.assertEqual(parse_direction("door s"), ("door", "south"))
+
+    def test_a_direction_alone_returns_an_empty_name(self):
+        """CN-12 — the whole input was the direction."""
+        self.assertEqual(parse_direction("south"), ("", "south"))
+        self.assertEqual(parse_direction("s"), ("", "south"))
+
+    def test_input_with_no_direction_returns_the_whole_name(self):
+        """CN-13 — nothing to split."""
+        self.assertEqual(parse_direction("chest"), ("chest", None))
+
+    def test_a_multi_word_name_with_no_direction_stays_whole(self):
+        """CN-14 — `iron gate`."""
+        self.assertEqual(parse_direction("iron gate"), ("iron gate", None))
+
+    def test_a_multi_word_name_with_a_direction_keeps_the_name_whole(self):
+        """CN-15 — `iron gate south`."""
+        self.assertEqual(parse_direction("iron gate south"), ("iron gate", "south"))
+
+    def test_input_is_matched_case_insensitively(self):
+        """CN-16 — `Door South`."""
+        self.assertEqual(parse_direction("Door South"), ("door", "south"))
+
+    def test_empty_input_returns_an_empty_name_and_no_direction(self):
+        """CN-17 — nothing typed, nothing found."""
+        self.assertEqual(parse_direction(""), ("", None))
+        self.assertEqual(parse_direction("   "), ("", None))
